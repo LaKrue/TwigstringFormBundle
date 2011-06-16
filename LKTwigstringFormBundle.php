@@ -9,10 +9,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace LaKrue\RenderStringFormBundle;
+namespace LK\TwigstringFormBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class LaKrueRenderStringFormBundle extends Bundle
+class LKTwigstringFormBundle extends Bundle
 {
 }

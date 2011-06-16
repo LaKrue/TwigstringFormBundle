@@ -3,29 +3,35 @@
  * (c) LaKrue <symfony@lakrue.com>
  */
 
-namespace LaKrue\RenderStringFormBundle\Controller;
+namespace LK\TwigstringFormBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use LaKrue\RenderStringFormBundle\Form\ExecuteType;
+use LK\TwigstringFormBundle\Form\VarsType;
+use LK\TwigstringFormBundle\Form\CodeType;
 
 class ExecuteController extends Controller
 {
     public function indexAction()
     {
-    	$vars = array();
-    	$form = $this->get('form.factory')->create(new ExecuteType());
+    	// rendered default text
+    	$vars = $this->get('form.factory')->create(new VarsType());
+    	$code = $this->get('form.factory')->create(new CodeType());
     	$request = $this->get('request');
 	    if($request->getMethod()=='POST') {
-	        $form->bindRequest($request);
-	        if($form->isValid()) {
-	        	$var_a = @$_POST['execute']['var_a'];
-	        	$var_b = @$_POST['execute']['var_b'];
-	        	$twig_code = @$_POST['execute']['twig'];
-	        	$params = array('A'=>$var_a, 'B'=>$var_b);
-	        	$vars['rendered'] = $this->get('renderstring')->render($twig_code, $params);
+	        $vars->bindRequest($request);
+	        $code->bindRequest($request);
+	        if($vars->isValid() && $code->isValid()) {
+	        	$var_a = @$_POST['vars']['a'];
+	        	$var_b = @$_POST['vars']['b'];
+	        	$text = @$_POST['code']['text'];
+	        	$params = array('a'=>$var_a, 'b'=>$var_b);
+	        	$rendered = $this->get('twigstring')->render($text, $params);
 	        }
 	    }
-	    $vars['execute'] = $form->createView();
-        return $this->render('LaKrueRenderStringFormBundle:pages:index.html.twig', $vars);
+	    $params = array();
+	    $params['vars'] = $vars->createView();
+	    $params['code'] = $code->createView();
+	    $params['rendered'] = @$rendered;
+        return $this->render('LKTwigstringFormBundle:pages:index.html.twig', $params);
     }
 }
