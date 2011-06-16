@@ -1,0 +1,14 @@
+<html>
+ <head>
+  <title>LaKrueRenderString form test</title>
+ </head>
+ <body>
+  <h1>LaKrue render string</h1>
+  <form action="{{ path('renderstring_form') }}" method="post">
+   {{ form_widget(execute) }}
+   <input type="submit" value="Execute" />
+  </form>
+  <h2>You rendered:</h2>
+   {{ rendered|default('nothing ...') }}
+ </body>
+</html>
